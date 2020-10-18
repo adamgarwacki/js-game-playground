@@ -1,6 +1,6 @@
 .game-container {
     background-color: red;
-
+    /* JEŚLI COŚ SIĘ ROZJECHAŁO, WIDAĆ CZERWONY */
     display: flex;
     flex-flow: row wrap;
 }
