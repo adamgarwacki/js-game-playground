@@ -1,0 +1,14 @@
+.game-container {
+    background-color: red;
+
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.single-panel {
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    background-color: green;
+    border: 1px solid black;
+}
