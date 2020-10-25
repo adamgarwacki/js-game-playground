@@ -4,6 +4,10 @@
 let cols = 5;
 let rows = 5;
 
+let objectiveCount = 3;
+
+let playerPos = [0, 0];
+
 // ------------------------------------
 
 let gameContainer = document.getElementById('game-container');
@@ -29,6 +33,7 @@ for (let i = 0; i < rows; i++) {
 
 
         singlePanelObject.panelId = singleGamePanel;
+        singlePanelObject.isObjective = false;
 
 
         gameContainer.appendChild(singleGamePanel);
@@ -39,13 +44,25 @@ for (let i = 0; i < rows; i++) {
     gamePanelsArray.push(arrayRow);
 }
 
+while (objectiveCount > 0) {
+    let posX = Math.floor(Math.random()*cols);
+    let posY = Math.floor(Math.random()*rows);
+
+    console.log(posX, posY);
+
+    if ((posX != 0 || posY != 0) && gamePanelsArray[posY][posX].isObjective == false) {
+        gamePanelsArray[posY][posX].isObjective = true;
+        gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
+        objectiveCount--;
+    } 
+}
+
 console.log(gamePanelsArray);
 
 
 // GAME ENGINE
 
-let playerPos = [0, 0];
-gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'yellow';
+gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yellow';
 
 
 
@@ -60,7 +77,7 @@ document.addEventListener('keydown', (e) => {
         switch (pressedKey) {
             case 'ArrowLeft':
                 if (playerPos[1] != 0) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'green';
+                    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
                     playerPos[1]--;
                     break;
                 } else {
@@ -69,7 +86,7 @@ document.addEventListener('keydown', (e) => {
                 
             case 'ArrowUp':
                 if (playerPos[0] != 0) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'green';
+                    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
                     playerPos[0]--;
                     break;
                 } else {
@@ -78,7 +95,7 @@ document.addEventListener('keydown', (e) => {
                 
             case 'ArrowRight':
                 if (playerPos[1] != cols-1) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'green';
+                    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
                     playerPos[1]++;
                     break;
                 } else {
@@ -87,7 +104,7 @@ document.addEventListener('keydown', (e) => {
                 
             case 'ArrowDown':
                 if (playerPos[0] != rows-1) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'green';
+                    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
                     playerPos[0]++;
                     break;
                 } else {
@@ -98,7 +115,7 @@ document.addEventListener('keydown', (e) => {
                 break;
         }
         
-        gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'yellow';
+        gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yellow';
     } else {
         console.log('Wygrałeś!');
     }
