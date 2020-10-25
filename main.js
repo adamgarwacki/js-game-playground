@@ -1,4 +1,5 @@
 'use strict';
+
 // PODAJ LICZBĘ RZĘDÓW I KOLUMN:
 let cols = 5;
 let rows = 5;
@@ -20,11 +21,19 @@ let indexIterator = 0;
 for (let i = 0; i < rows; i++) {
     let arrayRow = [];
     for (let j = 0; j < cols; j++) {
+        let singlePanelObject = {}
         let singleGamePanel = document.createElement('div');
         singleGamePanel.classList.add('single-panel');
-        singleGamePanel.id = `element-index-${indexIterator}`;
+
+        // singleGamePanel.id = `element-index-${indexIterator}`;
+
+
+        singlePanelObject.panelId = singleGamePanel;
+
+
         gameContainer.appendChild(singleGamePanel);
-        arrayRow.push(singleGamePanel);
+
+        arrayRow.push(singlePanelObject);
         indexIterator++;
     }
     gamePanelsArray.push(arrayRow);
@@ -32,9 +41,10 @@ for (let i = 0; i < rows; i++) {
 
 console.log(gamePanelsArray);
 
+
 // GAME ENGINE
 
-let playerPos = [2, 2];
+let playerPos = [0, 0];
 gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'yellow';
 
 
