@@ -1,7 +1,7 @@
 'use strict';
 // PODAJ LICZBĘ RZĘDÓW I KOLUMN:
-let cols = 5;
-let rows = 5;
+let cols = 10;
+let rows = 10;
 
 // ------------------------------------
 
@@ -15,14 +15,14 @@ gameContainer.style.height = `${containerHeight}px`;
 
 
 let gamePanelsArray = [];
-let indexIterator = 0;
+let indexIterator = 0; 
 
 for (let i = 0; i < rows; i++) {
     let arrayRow = [];
     for (let j = 0; j < cols; j++) {
         let singleGamePanel = document.createElement('div');
         singleGamePanel.classList.add('single-panel');
-        singleGamePanel.id = `element-index-${indexIterator}`;
+        singleGamePanel.id = `element-${indexIterator}`;
         gameContainer.appendChild(singleGamePanel);
         arrayRow.push(singleGamePanel);
         indexIterator++;
@@ -32,12 +32,19 @@ for (let i = 0; i < rows; i++) {
 
 console.log(gamePanelsArray);
 
+// MUSHROOMS
+let mushrooms = []
+for(let i = 0; i<Math.floor((cols*rows)/2);i++){
+     mushrooms[i] = document.querySelector(`#element-${Math.floor(Math.random() * rows*cols)}`);
+     mushrooms[i].style.backgroundColor='red'
+}
+// console.log(mushrooms)
+
+
 // GAME ENGINE
 
-let playerPos = [2, 2];
+let playerPos = [0, 0];
 gamePanelsArray[playerPos[0]][playerPos[1]].style.backgroundColor = 'yellow';
-
-
 
 
 let isWin = false;
