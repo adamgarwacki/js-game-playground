@@ -43,7 +43,7 @@ for (let i = 0; i < rows; i++) {
 
         singlePanelObject.panelId = singleGamePanel;
         singlePanelObject.isObjective = false;
-        singlePanelObject.isObstacle = false;
+        singlePanelObject.isObstacle = true;
 
 
         gameContainer.appendChild(singleGamePanel);
@@ -54,21 +54,83 @@ for (let i = 0; i < rows; i++) {
     gamePanelsArray.push(arrayRow);
 }
 
-while (objectiveCount > 0) {
-    let posX = Math.floor(Math.random() * cols);
-    let posY = Math.floor(Math.random() * rows);
 
-    console.log(posX, posY);
+// GENEROWANIE LABIRYNTU:
 
-    if ((posX != 0 || posY != 0) && gamePanelsArray[posY][posX].isObjective == false) {
-        gamePanelsArray[posY][posX].isObjective = true;
-        gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
-        objectiveCount--;
-    }
-}
+gamePanelsArray.forEach((row) => {
+    row.forEach((panel) => {
+        let xPos = row.indexOf(panel);
+        let yPos = gamePanelsArray.indexOf(row);
+        
+        let walkWayCount = 0;
+        let nearbyObstacles = [];
+
+        if (yPos > 0) {
+            if (gamePanelsArray[yPos-1][xPos].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos-1][xPos]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        if (xPos > 0) {
+            if (gamePanelsArray[yPos][xPos-1].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos][xPos-1]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        if (xPos < cols-1) {
+            if (gamePanelsArray[yPos][xPos+1].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos][xPos+1]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        if (yPos < rows-1) {
+            if (gamePanelsArray[yPos+1][xPos].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos+1][xPos]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        // let nearbyObstaclesCount = nearbyObstacles.length;
+
+
+        // TUTAJ NIE DZIAŁA!!!!!!!!!!!
+        console.log(walkWayCount);
+        while (walkWayCount < 2) {
+            let randNum = Math.floor(Math.random()*nearbyObstacles.length)
+            nearbyObstacles[randNum].isObstacle = false;
+            nearbyObstacles[randNum].panelId.style.backgroundColor = 'green';
+            let tempArr = nearbyObstacles.splice(randNum, 1);
+            nearbyObstacles = [];
+            nearbyObstacles = tempArr;
+            // console.log(nearbyObstacles);
+            walkWayCount++;
+        }
+    })
+})
 
 console.log(gamePanelsArray);
 
+// while (objectiveCount > 0) {
+//     let posX = Math.floor(Math.random() * cols);
+//     let posY = Math.floor(Math.random() * rows);
+
+//     console.log(posX, posY);
+
+//     if ((posX != 0 || posY != 0) && gamePanelsArray[posY][posX].isObjective == false) {
+//         gamePanelsArray[posY][posX].isObjective = true;
+//         gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
+//         objectiveCount--;
+//     }
+// }
+
+console.log(gamePanelsArray);
 
 // GAME ENGINE
 
