@@ -75,20 +75,11 @@ console.log(gamePanelsArray);
 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yellow';
 
 
-let pressedKey = 0
-
 document.addEventListener('keydown', (e) => {
-    let pressedKey = e.code;
-
-    switch (pressedKey) {
+    switch (e.code) {
         case 'ArrowLeft':
             if (playerPos[1] != 0) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
-
-                if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
-                    victoryCount--;
-                }
 
                 playerPos[1]--;
                 break;
@@ -100,11 +91,6 @@ document.addEventListener('keydown', (e) => {
             if (playerPos[0] != 0) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
 
-                if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
-                    victoryCount--;
-                }
-
                 playerPos[0]--;
                 break;
             } else {
@@ -115,11 +101,6 @@ document.addEventListener('keydown', (e) => {
             if (playerPos[1] != cols - 1) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
 
-                if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
-                    victoryCount--;
-                }
-
                 playerPos[1]++;
                 break;
             } else {
@@ -129,11 +110,6 @@ document.addEventListener('keydown', (e) => {
         case 'ArrowDown':
             if (playerPos[0] != rows - 1) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
-
-                if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
-                    gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
-                    victoryCount--;
-                }
 
                 playerPos[0]++;
                 break;
@@ -146,14 +122,18 @@ document.addEventListener('keydown', (e) => {
     }
     gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yellow';
 
-    console.log(victoryCount);
-    if (victoryCount == 0) {
-        alert('Wygrałeś!!!');
+    if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
+        gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
+        victoryCount--;
     }
-});
 
-// JEST JAKIŚ PROBLEM Z CYKLEM ŻYCIA EVENTU (LINIA 80):
-// - odpala się event 'keydown', czyli update planszy/gry;
-// - victoryCount obniżany jest o 1, ale ta zmiana jest rejestrowana dopiero po zakończeniu wykonywania eventu;
-// - naciska się klawisz i dopiero wtedy pojawia się alert
-// Będę starał się to jakoś obejść, to jest tylko informacja dla potencjalnych oglądających
+    // Poniższy setTimeout() "opóźnia" (chyba...?) w jakiś sposób wykonanie tego alertu, tak żeby najpierw poszedł DOM
+    // zmieniający kolor kafelka na żółty.
+    // Wiem że działa, ale nie wiem dlaczego.
+
+    setTimeout(() => {
+        if (victoryCount == 0) {
+            alert('Wygrałeś!!!');
+        }
+    }, 0);
+});
