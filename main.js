@@ -7,6 +7,7 @@ let rows = 5;
 
 let objectiveCount = 3;
 let victoryCount = objectiveCount;
+let obstacleMap5x5 = [[0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0]];
 
 let playerPos = [0, 0];
 
@@ -38,12 +39,13 @@ for (let i = 0; i < rows; i++) {
         let singleGamePanel = document.createElement('div');
         singleGamePanel.classList.add('single-panel');
 
+        // Nadawanie id poszczególnym polom - może się przydać kiedyś!!!
         // singleGamePanel.id = `element-index-${indexIterator}`;
 
 
         singlePanelObject.panelId = singleGamePanel;
         singlePanelObject.isObjective = false;
-        singlePanelObject.isObstacle = true;
+        singlePanelObject.isObstacle = false;
 
 
         gameContainer.appendChild(singleGamePanel);
@@ -53,11 +55,22 @@ for (let i = 0; i < rows; i++) {
     }
     gamePanelsArray.push(arrayRow);
 }
+console.log(gamePanelsArray);
+
+// USTAWIANIE MAPY
+obstacleMap5x5.forEach(row => {
+    for (let i = 0; i < row.length; i++) {
+        if (row[i] == 1) {
+            gamePanelsArray[obstacleMap5x5.indexOf(row)][i].isObstacle = true;
+            gamePanelsArray[obstacleMap5x5.indexOf(row)][i].panelId.style.backgroundColor = 'gray';
+        }
+    }
+})
 
 
-// GENEROWANIE LABIRYNTU:
+// GENEROWANIE LABIRYNTU: (NIE DZIAŁA - ZOSTAWIAM JAKO "PAMIĄTKA")
 
-gamePanelsArray.forEach((row) => {
+/* gamePanelsArray.forEach((row) => {
     row.forEach((panel) => {
         let xPos = row.indexOf(panel);
         let yPos = gamePanelsArray.indexOf(row);
@@ -113,24 +126,22 @@ gamePanelsArray.forEach((row) => {
             walkWayCount++;
         }
     })
-})
+}) */
 
-console.log(gamePanelsArray);
 
-// while (objectiveCount > 0) {
-//     let posX = Math.floor(Math.random() * cols);
-//     let posY = Math.floor(Math.random() * rows);
+// USTAWIANIE OBJECTIVE
 
-//     console.log(posX, posY);
+while (objectiveCount > 0) {
+    let posX = Math.floor(Math.random() * cols);
+    let posY = Math.floor(Math.random() * rows);
 
-//     if ((posX != 0 || posY != 0) && gamePanelsArray[posY][posX].isObjective == false) {
-//         gamePanelsArray[posY][posX].isObjective = true;
-//         gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
-//         objectiveCount--;
-//     }
-// }
+    if ((posX != 0 || posY != 0) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
+        gamePanelsArray[posY][posX].isObjective = true;
+        gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
+        objectiveCount--;
+    }
+}
 
-console.log(gamePanelsArray);
 
 // GAME ENGINE
 
@@ -140,7 +151,7 @@ gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yel
 document.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'ArrowLeft':
-            if (playerPos[1] != 0) {
+            if (playerPos[1] != 0 && !gamePanelsArray[playerPos[0]][playerPos[1] - 1].isObstacle) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
 
                 playerPos[1]--;
@@ -150,7 +161,7 @@ document.addEventListener('keydown', (e) => {
             }
 
         case 'ArrowUp':
-            if (playerPos[0] != 0) {
+            if (playerPos[0] != 0 && !gamePanelsArray[playerPos[0] - 1][playerPos[1]].isObstacle) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
 
                 playerPos[0]--;
@@ -160,7 +171,7 @@ document.addEventListener('keydown', (e) => {
             }
 
         case 'ArrowRight':
-            if (playerPos[1] != cols - 1) {
+            if (playerPos[1] != cols - 1 && !gamePanelsArray[playerPos[0]][playerPos[1] + 1].isObstacle) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
 
                 playerPos[1]++;
@@ -170,7 +181,7 @@ document.addEventListener('keydown', (e) => {
             }
 
         case 'ArrowDown':
-            if (playerPos[0] != rows - 1) {
+            if (playerPos[0] != rows - 1 && !gamePanelsArray[playerPos[0] + 1][playerPos[1]].isObstacle) {
                 gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
 
                 playerPos[0]++;
