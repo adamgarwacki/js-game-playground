@@ -1,7 +1,7 @@
-
 * {
     margin: 0;
 }
+
 .game-container {
     background-color: red;
     /* JEŚLI COŚ SIĘ ROZJECHAŁO, WIDAĆ CZERWONY */
@@ -19,13 +19,15 @@
 }
 
 .main-container {
-    width: 100%;
+    width: 80%;
     /* margin: 100px auto; */
 }
 
 .header-one {
-     text-align: center;
-     font-family: Arial, Helvetica, sans-serif;
+    margin: 24px;
+    font-size: 63px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -33,5 +35,5 @@ body {
 }
 
 h1 {
-    color: blanchedalmond;
+    color: gold;
 }

@@ -145,7 +145,7 @@ while (objectiveCount > 0) {
 
 // GAME ENGINE
 
-gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yellow';
+gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'gold';
 
 
 document.addEventListener('keydown', (e) => {
@@ -193,7 +193,7 @@ document.addEventListener('keydown', (e) => {
         default:
             break;
     }
-    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'yellow';
+    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'gold';
 
     if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
         gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
