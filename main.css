@@ -15,7 +15,7 @@
     width: 100px;
     height: 100px;
     background-color: green;
-    border: 1px solid black;
+    border: 3px solid #121c54;
 }
 
 .main-container {
@@ -26,4 +26,12 @@
 .header-one {
      text-align: center;
      font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #121c54;
+}
+
+h1 {
+    color: blanchedalmond;
 }
