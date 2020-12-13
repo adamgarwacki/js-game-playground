@@ -2,31 +2,13 @@
     margin: 0;
 }
 
-.game-container {
-    background-color: red;
-    /* JEŚLI COŚ SIĘ ROZJECHAŁO, WIDAĆ CZERWONY */
-    display: flex;
-    flex-flow: row wrap;
-    width: 80%;
-}
-
-.single-panel {
-    box-sizing: border-box;
-    width: 100px;
-    height: 100px;
-    background-color: green;
-    border: 3px solid #121c54;
+body {
+    background-color: #121c54;
 }
 
 .main-container {
     width: 80%;
     margin: auto;
-}
-
-.main-game-area {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 }
 
 .game-side-panel {
@@ -42,12 +24,63 @@
     font-size: 63px;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    background-color: #121c54;
-}
-
-h1 {
     color: gold;
+}
+
+.sub-header {
+    margin: 10px;
+    color: gold;
+}
+
+.game-container {
+    background-color: red;
+    /* JEŚLI COŚ SIĘ ROZJECHAŁO, WIDAĆ CZERWONY */
+    display: flex;
+    flex-flow: row wrap;
+    width: 600px;
+    height: 600px;
+}
+
+.main-game-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.single-panel {
+    box-sizing: border-box;
+    background-color: green;
+    border: 3px solid #121c54;
+}
+
+/* PANEL SIZE PRESETS */
+
+.single-panel-2 {
+    width: 300px;
+    height: 300px;
+}
+
+.single-panel-3 {
+    width: 200px;
+    height: 200px;
+}
+
+.single-panel-4 {
+    width: 150px;
+    height: 150px;
+}
+
+.single-panel-5 {
+    width: 120px;
+    height: 120px;
+}
+
+.single-panel-6 {
+    width: 100px;
+    height: 100px;
+}
+
+.single-panel-8 {
+    width: 75px;
+    height: 75px;
 }

@@ -2,21 +2,64 @@
 
 // PARAMETRY GRY:
 
-let cols = 5;
-let rows = 5;
+// NIE USUWAĆ!!!! MOŻE BYĆ POTRZEBNE DO ODKRĘCENIA JAKIEGOŚ BŁĘDU!
+// let mapObject.objectiveCount = 3;
+// let mapObject.obstacleMap = [[0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0]];
+// let mapObject.playerPosition = [0, 0];
+// let mapObject.size = 5;
+// let mapObject.size = 5;
 
-let objectiveCount = 3;
-let victoryCount = objectiveCount;
-let obstacleMap5x5 = [[0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0]];
 
-let playerPos = [0, 0];
+let mapObject = {
+    'size': 6,
+    'objectiveCount': 5,
+    'obstacleMap': [[0, 0, 0, 0, 0, 0], 
+                    [0, 1, 0, 1, 0, 1], 
+                    [0, 1, 0, 0, 0, 0], 
+                    [0, 1, 1, 0, 1, 0], 
+                    [0, 0, 0, 0, 0, 0]],
+    'playerPosition': [0, 0]
+}
+
+let victoryCount = mapObject.objectiveCount;
+let panelSizePreset = '';
+
+switch (mapObject.size) {
+    case 2:
+        panelSizePreset = 'single-panel-2';
+        break;
+
+    case 3:
+        panelSizePreset = 'single-panel-3';
+        break;
+
+    case 4:
+        panelSizePreset = 'single-panel-4';
+        break;
+
+    case 5:
+        panelSizePreset = 'single-panel-5';
+        break;
+    
+    case 6:
+        panelSizePreset = 'single-panel-6';
+        break;
+
+    case 8:
+        panelSizePreset = 'single-panel-8';
+        break;
+
+    default:
+        console.log('Nie istnieje preset kafelka dla podanego rozmiaru planszy!');
+        break;
+}
 
 
 // ALERT NA WYPADEK NIEWŁAŚCIWEJ ILOŚCI KOLUMN:
 
-if (((rows * cols) - 1) < objectiveCount) {
+if (((mapObject.size * mapObject.size) - 1) < mapObject.objectiveCount) {
     alert('UWAGA! ZA MAŁO PÓL - WEJDZIE NIESKOŃCZONA PĘTLA!!!!!!!');
-    objectiveCount = 0
+    mapObject.objectiveCount = 0
 }
 
 
@@ -24,20 +67,20 @@ if (((rows * cols) - 1) < objectiveCount) {
 
 let gameContainer = document.getElementById('game-container');
 
-let containerWidth = cols * 100;
-gameContainer.style.width = `${containerWidth}px`;
-let containerHeight = rows * 100;
-gameContainer.style.height = `${containerHeight}px`;
+// let containerWidth = mapObject.size * 100;
+// gameContainer.style.width = `${containerWidth}px`;
+// let containerHeight = mapObject.size * 100;
+// gameContainer.style.height = `${containerHeight}px`;
 
 let gamePanelsArray = [];
 let indexIterator = 0;
 
-for (let i = 0; i < rows; i++) {
+for (let i = 0; i < mapObject.size; i++) {
     let arrayRow = [];
-    for (let j = 0; j < cols; j++) {
+    for (let j = 0; j < mapObject.size; j++) {
         let singlePanelObject = {}
         let singleGamePanel = document.createElement('div');
-        singleGamePanel.classList.add('single-panel');
+        singleGamePanel.classList.add('single-panel', panelSizePreset);
 
         // Nadawanie id poszczególnym polom - może się przydać kiedyś!!!
         // singleGamePanel.id = `element-index-${indexIterator}`;
@@ -58,11 +101,11 @@ for (let i = 0; i < rows; i++) {
 console.log(gamePanelsArray);
 
 // USTAWIANIE MAPY
-obstacleMap5x5.forEach(row => {
+mapObject.obstacleMap.forEach(row => {
     for (let i = 0; i < row.length; i++) {
         if (row[i] == 1) {
-            gamePanelsArray[obstacleMap5x5.indexOf(row)][i].isObstacle = true;
-            gamePanelsArray[obstacleMap5x5.indexOf(row)][i].panelId.style.backgroundColor = 'gray';
+            gamePanelsArray[mapObject.obstacleMap.indexOf(row)][i].isObstacle = true;
+            gamePanelsArray[mapObject.obstacleMap.indexOf(row)][i].panelId.style.backgroundColor = 'gray';
         }
     }
 })
@@ -131,60 +174,60 @@ obstacleMap5x5.forEach(row => {
 
 // USTAWIANIE OBJECTIVE
 
-while (objectiveCount > 0) {
-    let posX = Math.floor(Math.random() * cols);
-    let posY = Math.floor(Math.random() * rows);
+while (mapObject.objectiveCount > 0) {
+    let posX = Math.floor(Math.random() * mapObject.size);
+    let posY = Math.floor(Math.random() * mapObject.size);
 
     if ((posX != 0 || posY != 0) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
         gamePanelsArray[posY][posX].isObjective = true;
         gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
-        objectiveCount--;
+        mapObject.objectiveCount--;
     }
 }
 
 
 // GAME ENGINE
 
-gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'gold';
+gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'gold';
 
 
 document.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'ArrowLeft':
-            if (playerPos[1] != 0 && !gamePanelsArray[playerPos[0]][playerPos[1] - 1].isObstacle) {
-                gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
+            if (mapObject.playerPosition[1] != 0 && !gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1] - 1].isObstacle) {
+                gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
 
-                playerPos[1]--;
+                mapObject.playerPosition[1]--;
                 break;
             } else {
                 break;
             }
 
         case 'ArrowUp':
-            if (playerPos[0] != 0 && !gamePanelsArray[playerPos[0] - 1][playerPos[1]].isObstacle) {
-                gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
+            if (mapObject.playerPosition[0] != 0 && !gamePanelsArray[mapObject.playerPosition[0] - 1][mapObject.playerPosition[1]].isObstacle) {
+                gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
 
-                playerPos[0]--;
+                mapObject.playerPosition[0]--;
                 break;
             } else {
                 break;
             }
 
         case 'ArrowRight':
-            if (playerPos[1] != cols - 1 && !gamePanelsArray[playerPos[0]][playerPos[1] + 1].isObstacle) {
-                gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
+            if (mapObject.playerPosition[1] != mapObject.size - 1 && !gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1] + 1].isObstacle) {
+                gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
 
-                playerPos[1]++;
+                mapObject.playerPosition[1]++;
                 break;
             } else {
                 break;
             }
 
         case 'ArrowDown':
-            if (playerPos[0] != rows - 1 && !gamePanelsArray[playerPos[0] + 1][playerPos[1]].isObstacle) {
-                gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'green';
+            if (mapObject.playerPosition[0] != mapObject.size - 1 && !gamePanelsArray[mapObject.playerPosition[0] + 1][mapObject.playerPosition[1]].isObstacle) {
+                gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
 
-                playerPos[0]++;
+                mapObject.playerPosition[0]++;
                 break;
             } else {
                 break;
@@ -193,10 +236,10 @@ document.addEventListener('keydown', (e) => {
         default:
             break;
     }
-    gamePanelsArray[playerPos[0]][playerPos[1]].panelId.style.backgroundColor = 'gold';
+    gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'gold';
 
-    if (gamePanelsArray[playerPos[0]][playerPos[1]].isObjective == true) {
-        gamePanelsArray[playerPos[0]][playerPos[1]].isObjective = false;
+    if (gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective == true) {
+        gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective = false;
         victoryCount--;
     }
 
