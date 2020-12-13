@@ -7,7 +7,7 @@
     /* JEŚLI COŚ SIĘ ROZJECHAŁO, WIDAĆ CZERWONY */
     display: flex;
     flex-flow: row wrap;
-    margin: auto;
+    width: 80%;
 }
 
 .single-panel {
@@ -20,7 +20,21 @@
 
 .main-container {
     width: 80%;
-    /* margin: 100px auto; */
+    margin: auto;
+}
+
+.main-game-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.game-side-panel {
+    /* Tutaj border top-down ma 3px ponieważ tyle mają kafelki planszy */
+    margin: 3px 10px;
+    width: 15%;
+    border: 3px solid gold;
+    text-align: center;
 }
 
 .header-one {
