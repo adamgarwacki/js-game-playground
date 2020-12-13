@@ -21,7 +21,6 @@ let mapObject = {
     'playerPosition': [0, 0]
 }
 
-let victoryCount = mapObject.objectiveCount;
 let panelSizePreset = '';
 
 switch (mapObject.size) {
@@ -173,17 +172,26 @@ mapObject.obstacleMap.forEach(row => {
 
 
 // USTAWIANIE OBJECTIVE
+let victoryCount = mapObject.objectiveCount;
 
-while (mapObject.objectiveCount > 0) {
+let changeObjective = () => {
+    document.getElementById('score').innerText = `${mapObject.objectiveCount - victoryCount} / ${mapObject.objectiveCount}`;
+}
+
+let ob = mapObject.objectiveCount;
+while (ob > 0) {
     let posX = Math.floor(Math.random() * mapObject.size);
     let posY = Math.floor(Math.random() * mapObject.size);
 
     if ((posX != 0 || posY != 0) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
         gamePanelsArray[posY][posX].isObjective = true;
         gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
-        mapObject.objectiveCount--;
+        ob--;
     }
 }
+
+changeObjective();
+
 
 
 // GAME ENGINE
@@ -241,6 +249,7 @@ document.addEventListener('keydown', (e) => {
     if (gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective == true) {
         gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective = false;
         victoryCount--;
+        changeObjective();
     }
 
     // Poniższy setTimeout() "opóźnia" (chyba...?) w jakiś sposób wykonanie tego alertu, tak żeby najpierw poszedł DOM
@@ -249,7 +258,7 @@ document.addEventListener('keydown', (e) => {
 
     setTimeout(() => {
         if (victoryCount == 0) {
-            alert('Wygrałeś!!!');
+            document.getElementById('game-container-win').style.opacity = 1;
         }
     }, 0);
 });
