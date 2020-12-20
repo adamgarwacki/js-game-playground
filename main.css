@@ -21,7 +21,7 @@ body {
     text-align: center;
 }
 
-.game-side-panel > p {
+.game-side-panel>p {
     font-size: 1.25em;
 }
 
@@ -51,13 +51,12 @@ body {
     left: 0px;
     width: 100%;
     height: 100%;
-
     background-color: #121c54cc;
     opacity: 0;
     transition: all 0.5s;
 }
 
-.game-container-win > .sub-header {
+.game-container-win>.sub-header {
     margin: 0px;
     text-align: center;
     line-height: 600px;
@@ -75,6 +74,30 @@ body {
     background-color: green;
     border: 3px solid #121c54;
 }
+
+/*CONTROL BUTTONS*/
+
+.button-space {
+    display: flex;
+    flex-direction: row;
+    border: solid gold;
+    align-items: center;
+    background-color: #121c54;
+}
+
+.button-space>div:nth-child(odd) {
+
+    width: 30%;
+    border: solid gold;
+    background-color: #121c54;
+}
+
+.button-space>div:nth-child(2) {
+    width: 40%;
+    background-color: #121c54;
+}
+
+
 
 /* PANEL SIZE PRESETS */
 
