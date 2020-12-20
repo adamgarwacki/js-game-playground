@@ -198,9 +198,8 @@ changeObjective();
 
 gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'gold';
 
-
-document.addEventListener('keydown', (e) => {
-    switch (e.code) {
+let playerMovement = (direction) => {
+    switch (direction) {
         case 'ArrowLeft':
             if (mapObject.playerPosition[1] != 0 && !gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1] - 1].isObstacle) {
                 gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
@@ -261,4 +260,11 @@ document.addEventListener('keydown', (e) => {
             document.getElementById('game-container-win').style.opacity = 1;
         }
     }, 0);
+}
+
+
+// EVENTS HANDLING
+
+document.addEventListener('keydown', (e) => {
+    playerMovement(e.code);
 });
