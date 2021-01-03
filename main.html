@@ -16,6 +16,7 @@
         <div class="main-game-area">
             <div class="game-side-panel">
                 <h2 class="sub-header">LEVEL</h2>
+                <p>1</p>
             </div>
 
             <div class="game-container" id="game-container">
@@ -36,21 +37,34 @@
         <div class="button-space">
 
             <div>
-
-                <button onclick="playerMovement('ArrowLeft')">Arrow left</button>
-
+                <button onclick="playerMovement('ArrowLeft')">
+                    <svg height="140" width="100%" viewbox="0 0 200 64" preserveAspectRatio="none">
+                        <polygon class="arrow" points="0,32 200,64 200,0"/>
+                    </svg>
+                </button>
             </div>
 
             <div>
+                <button onclick="playerMovement('ArrowUp')">
+                    <svg height="64" width="100%" viewbox="0 0 200 64" preserveAspectRatio="none">
+                        <polygon class="arrow" points="100,0 0,64 200,64"/>
+                    </svg>
+                </button>
 
-                <button onclick="playerMovement('ArrowUp')">Arrow up</button>
-                <br>
-                <button onclick="playerMovement('ArrowDown')">Arrow down</button>
+                <button onclick="playerMovement('ArrowDown')">
+                    <svg height="64" width="100%" viewbox="0 0 200 64" preserveAspectRatio="none">
+                        <polygon class="arrow" points="100,64 0,0 200,0"/>
+                    </svg>
+                </button>
             </div>
 
             <div>
-
-                <button onclick="playerMovement('ArrowRight')">Arrow right</button>
+                <button onclick="playerMovement('ArrowRight')">
+                    <svg height="140" width="100%" viewbox="0 0 200 64" preserveAspectRatio="none">
+                        <polygon class="arrow" points="0,0 0,64 200,32"/>
+                    </svg>
+                    <!-- <img src="./img/arrow_unoptimized.png" alt="arrow"> -->
+                </button>
             </div>
         </div>
     </div>

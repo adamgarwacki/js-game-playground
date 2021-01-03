@@ -9,14 +9,14 @@ body {
 }
 
 .main-container {
-    width: 80%;
+    width: 100%;
     margin: auto;
 }
 
 .game-side-panel {
     /* Tutaj border top-down ma 3px ponieważ tyle mają kafelki planszy */
     margin: 3px 10px;
-    width: 15%;
+    width: 120px;
     border: 3px solid gold;
     text-align: center;
 }
@@ -49,8 +49,8 @@ body {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100%;
+    width: 600px;
+    height: 600px;
     background-color: #121c54cc;
     opacity: 0;
     transition: all 0.5s;
@@ -86,9 +86,7 @@ body {
 }
 
 .button-space>div:nth-child(odd) {
-
     width: 30%;
-    border: solid gold;
     background-color: #121c54;
 }
 
@@ -97,6 +95,21 @@ body {
     background-color: #121c54;
 }
 
+.button-space button {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    background-color: transparent;
+    border: none;
+    border: 2px solid gold;
+    border-radius: 2px;
+}
+
+.arrow {
+    fill: gold;
+    stroke: gold;
+    stroke-width: 1;
+}
 
 
 /* PANEL SIZE PRESETS */
@@ -129,4 +142,71 @@ body {
 .single-panel-8 {
     width: 75px;
     height: 75px;
+}
+/* RWD */
+
+@media (max-width: 910px) {
+    .main-game-area {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-side-panel {
+        width: 600px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+}
+
+@media (max-width: 636px) {
+    .game-container {
+        width: 360px;
+        height: 360px;
+    }
+
+    .game-container-win {
+        width: 360px;
+        height: 360px;
+    }
+    
+    .game-container-win>.sub-header {
+        line-height: 360px;
+    }
+
+    .game-side-panel {
+        width: 360px;
+    }
+
+    .single-panel-2 {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .single-panel-3 {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .single-panel-4 {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .single-panel-5 {
+        width: 72px;
+        height: 72px;
+    }
+    
+    .single-panel-6 {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .single-panel-8 {
+        width: 45px;
+        height: 45px;
+    }
 }
