@@ -2,7 +2,7 @@
 
 // TODO:
 // - lepsza funkcja-bezpiecznik (line 66)
-// 
+// - zmienić playerMovement (line 36, 244): problem z event listenerem
 
 
 // "INIT":
@@ -33,7 +33,30 @@ let map1 = {
 
 // START GRY, GENEROWANIE MAPY, PORUSZANIE SIĘ ETC:
 
+let playerMovement = undefined;
+
+let startMenu = () => {
+    gameContainer.innerHTML = '';
+
+    let menuContainer = document.createElement('div');
+    menuContainer.classList.add('menu-container');
+
+    let startButton = document.createElement('button');
+    startButton.classList.add('game-menu-button');
+    startButton.textContent = 'START';
+    startButton.addEventListener('click', () => {
+        console.log('dzyń');
+        startGame(map1);
+    })
+
+    menuContainer.appendChild(startButton);
+    gameContainer.appendChild(menuContainer);
+}
+
+
 let startGame = (mapObject) => {
+    gameContainer.innerHTML = '';
+
     let panelSizePreset = '';
     switch (mapObject.size) {
         case 2:
@@ -136,7 +159,7 @@ let startGame = (mapObject) => {
     // GAME ENGINE
     gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'gold';
 
-    let playerMovement = (direction) => {
+    playerMovement = (direction) => {
         switch (direction) {
             case 'ArrowLeft':
                 if (mapObject.playerPosition[1] != 0 && !gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1] - 1].isObstacle) {
@@ -177,6 +200,12 @@ let startGame = (mapObject) => {
                 } else {
                     break;
                 }
+
+            case 'Escape':
+                gameContainer.removeEventListener('keydown', playerMovement);
+                console.log(gamePanelsArray, map1);
+                startMenu();
+                break;
     
             default:
                 break;
@@ -187,13 +216,7 @@ let startGame = (mapObject) => {
             gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective = false;
             victoryCount--;
             changeObjective(objectiveCount, victoryCount);
-        }
-    
-        // Poniższy setTimeout() "opóźnia" (chyba...?) w jakiś sposób wykonanie tego alertu, tak żeby najpierw poszedł DOM
-        // zmieniający kolor kafelka na żółty.
-        // Wiem że działa, ale nie wiem dlaczego.
-    
-        setTimeout(() => {
+
             if (victoryCount == 0) {
                 let gameContainerWin = document.createElement('div');
                 gameContainerWin.classList.add('game-container-win');
@@ -211,18 +234,20 @@ let startGame = (mapObject) => {
                     gameContainerWin.style.opacity = 1;
                 }, 10);
             }
-        }, 0);
+        }
     }
     
     
     // EVENTS HANDLING
-    
-    document.addEventListener('keydown', (e) => {
-        playerMovement(e.code);
-    });
 }
 
-startGame(map1);
+document.addEventListener('keydown', (e) => {
+    playerMovement(e.code);
+});
+
+// "INIT2:"
+startMenu();
+
 
 
 

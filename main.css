@@ -46,6 +46,36 @@ body {
     height: 600px;
 }
 
+.menu-container {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #121c54;
+}
+
+.game-menu-button {
+    padding: 16px;
+    
+    font-size: 3em;
+    text-align: center;
+    font-weight: bold;
+
+    background-color: transparent;
+    border: none;
+
+    cursor: pointer;
+}
+
+.game-menu-button:focus {
+    outline: unset;
+}
+
 .game-container-win {
     position: absolute;
     top: 0px;
@@ -224,6 +254,11 @@ body {
     .game-container {
         width: 360px;
         height: 360px;
+    }
+    
+    .game-menu-button {
+        padding: 12px;   
+        font-size: 1.6em;
     }
 
     .game-container-win {
