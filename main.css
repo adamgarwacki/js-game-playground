@@ -82,6 +82,11 @@ body {
     left: 0px;
     width: 600px;
     height: 600px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
     background-color: #121c54cc;
     opacity: 0;
     transition: all 0.5s;
@@ -90,9 +95,17 @@ body {
 .win-message {
     margin: 0px;
     text-align: center;
-    line-height: 600px;
+    /* line-height: 600px; */
     font-size: 3em;
     font-weight: bold;
+}
+
+.sub-win-message {
+    font-size: 1.5em;
+    font-weight: normal;
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 }
 
 .main-game-area {
@@ -186,6 +199,22 @@ body {
     width: 75px;
     height: 75px;
 }
+
+/* ANIMACJE */
+@keyframes blink {
+    0% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
 /* RWD */
 
 @media (max-width: 910px) {

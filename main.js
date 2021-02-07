@@ -2,13 +2,14 @@
 
 // TODO:
 // - lepsza funkcja-bezpiecznik (line 66)
-// - zmienić playerMovement (line 36, 244): problem z event listenerem
+// - dodać licznik ruchów 
 
 
 // "INIT":
 let gameContainer = document.getElementById('game-container');
 
 // PRESETY MAP:
+
 let map1 = {
     'size': 6,
     'objectiveCount': 5,
@@ -21,18 +22,9 @@ let map1 = {
     'playerPosition': [0, 0]
 }
 
-
-// PARAMETRY GRY:
-// NIE USUWAĆ!!!! MOŻE BYĆ POTRZEBNE DO ODKRĘCENIA JAKIEGOŚ BŁĘDU!
-// let mapObject.objectiveCount = 3;
-// let mapObject.obstacleMap = [[0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0], [0, 1, 0, 1, 0], [0, 0, 0, 0, 0]];
-// let mapObject.playerPosition = [0, 0];
-// let mapObject.size = 5;
-// let mapObject.size = 5;
-
-
 // START GRY, GENEROWANIE MAPY, PORUSZANIE SIĘ ETC:
 
+// playerMovement definiowane jest tutaj, żeby móc z niego korzystać w startMenu oraz w event listenerze w linii 248;
 let playerMovement = undefined;
 
 let startMenu = () => {
@@ -45,8 +37,9 @@ let startMenu = () => {
     startButton.classList.add('game-menu-button');
     startButton.textContent = 'START';
     startButton.addEventListener('click', () => {
-        console.log('dzyń');
-        startGame(map1);
+        // deep clone obiektu, żeby nie pisać po oryginale
+        let mapObject = JSON.parse(JSON.stringify(map1));
+        startGame(mapObject);
     })
 
     menuContainer.appendChild(startButton);
@@ -55,10 +48,17 @@ let startMenu = () => {
 
 
 let startGame = (mapObject) => {
+
     gameContainer.innerHTML = '';
 
+    // zmienne dla wygody
+    let mapSize = mapObject.size;
+    let mapObjectiveCount = mapObject.objectiveCount;
+    let mapObstacleMap = mapObject.obstacleMap;
+    let mapPlayerPosition = mapObject.playerPosition;
+
     let panelSizePreset = '';
-    switch (mapObject.size) {
+    switch (mapSize) {
         case 2:
             panelSizePreset = 'single-panel-2';
             break;
@@ -88,18 +88,25 @@ let startGame = (mapObject) => {
             break;
     }
 
-    // ALERT NA WYPADEK NIEWŁAŚCIWEJ ILOŚCI KOLUMN: ---- DO POPRAWY - WZIĄĆ POD UWAGĘ ILOŚĆ PRZESZKÓD NA PLANSZY!!!!
-    if (((mapObject.size * mapObject.size) - 1) < mapObject.objectiveCount) {
-        alert('UWAGA! ZA MAŁO PÓL - WEJDZIE NIESKOŃCZONA PĘTLA!!!!!!!');
-        mapObject.objectiveCount = 0
+    let obstacleCount = 0;
+    mapObstacleMap.forEach((arr) => {
+        arr.forEach((el) => {
+            if (el == 1) {
+                obstacleCount += 1;
+            }
+        });
+    });
+
+    if (((mapSize * mapSize) - 1 - obstacleCount) < mapObjectiveCount) {
+        alert('Plansza ma za mało pól by wygenerować na niej podaną liczbę punktów do zebrania.');
+        mapObjectiveCount = 0;
     }
     
     let indexIterator = 0;
     let gamePanelsArray = [];
-    
-    for (let i = 0; i < mapObject.size; i++) {
+    for (let i = 0; i < mapSize; i++) {
         let arrayRow = [];
-        for (let j = 0; j < mapObject.size; j++) {
+        for (let j = 0; j < mapSize; j++) {
             let singlePanelObject = {}
             let singleGamePanel = document.createElement('div');
             singleGamePanel.classList.add('single-panel', panelSizePreset);
@@ -116,31 +123,31 @@ let startGame = (mapObject) => {
             gameContainer.appendChild(singleGamePanel);
     
             arrayRow.push(singlePanelObject);
-            indexIterator++;
+            indexIterator += 1;
         }
         gamePanelsArray.push(arrayRow);
     }
     console.log(gamePanelsArray);
 
     // USTAWIANIE MAPY
-    mapObject.obstacleMap.forEach(row => {
+    mapObstacleMap.forEach(row => {
         for (let i = 0; i < row.length; i++) {
             if (row[i] == 1) {
-                gamePanelsArray[mapObject.obstacleMap.indexOf(row)][i].isObstacle = true;
-                gamePanelsArray[mapObject.obstacleMap.indexOf(row)][i].panelId.style.backgroundColor = 'gray';
+                gamePanelsArray[mapObstacleMap.indexOf(row)][i].isObstacle = true;
+                gamePanelsArray[mapObstacleMap.indexOf(row)][i].panelId.style.backgroundColor = 'gray';
             }
         }
     });
 
     
     // USTAWIANIE OBJECTIVE
-    let objectiveCount = mapObject.objectiveCount;
-    let victoryCount = mapObject.objectiveCount;
+    // let objectiveCount = mapObjectiveCount;
+    let victoryCount = mapObjectiveCount;
 
-    let ob = mapObject.objectiveCount;
+    let ob = mapObjectiveCount;
     while (ob > 0) {
-        let posX = Math.floor(Math.random() * mapObject.size);
-        let posY = Math.floor(Math.random() * mapObject.size);
+        let posX = Math.floor(Math.random() * mapSize);
+        let posY = Math.floor(Math.random() * mapSize);
     
         if ((posX != 0 || posY != 0) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
             gamePanelsArray[posY][posX].isObjective = true;
@@ -153,49 +160,49 @@ let startGame = (mapObject) => {
         document.getElementById('score').innerText = `${maxScore - victoryCount} / ${maxScore}`;
     }
     
-    changeObjective(objectiveCount, victoryCount);
+    changeObjective(mapObjectiveCount, victoryCount);
     
 
     // GAME ENGINE
-    gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'gold';
+    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'gold';
 
     playerMovement = (direction) => {
         switch (direction) {
             case 'ArrowLeft':
-                if (mapObject.playerPosition[1] != 0 && !gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1] - 1].isObstacle) {
-                    gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (mapPlayerPosition[1] != 0 && !gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1] - 1].isObstacle) {
+                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
     
-                    mapObject.playerPosition[1]--;
+                    mapPlayerPosition[1]--;
                     break;
                 } else {
                     break;
                 }
     
             case 'ArrowUp':
-                if (mapObject.playerPosition[0] != 0 && !gamePanelsArray[mapObject.playerPosition[0] - 1][mapObject.playerPosition[1]].isObstacle) {
-                    gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (mapPlayerPosition[0] != 0 && !gamePanelsArray[mapPlayerPosition[0] - 1][mapPlayerPosition[1]].isObstacle) {
+                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
     
-                    mapObject.playerPosition[0]--;
+                    mapPlayerPosition[0]--;
                     break;
                 } else {
                     break;
                 }
     
             case 'ArrowRight':
-                if (mapObject.playerPosition[1] != mapObject.size - 1 && !gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1] + 1].isObstacle) {
-                    gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (mapPlayerPosition[1] != mapSize - 1 && !gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1] + 1].isObstacle) {
+                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
     
-                    mapObject.playerPosition[1]++;
+                    mapPlayerPosition[1]++;
                     break;
                 } else {
                     break;
                 }
     
             case 'ArrowDown':
-                if (mapObject.playerPosition[0] != mapObject.size - 1 && !gamePanelsArray[mapObject.playerPosition[0] + 1][mapObject.playerPosition[1]].isObstacle) {
-                    gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (mapPlayerPosition[0] != mapSize - 1 && !gamePanelsArray[mapPlayerPosition[0] + 1][mapPlayerPosition[1]].isObstacle) {
+                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
     
-                    mapObject.playerPosition[0]++;
+                    mapPlayerPosition[0]++;
                     break;
                 } else {
                     break;
@@ -203,19 +210,18 @@ let startGame = (mapObject) => {
 
             case 'Escape':
                 gameContainer.removeEventListener('keydown', playerMovement);
-                console.log(gamePanelsArray, map1);
                 startMenu();
                 break;
     
             default:
                 break;
         }
-        gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].panelId.style.backgroundColor = 'gold';
+        gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'gold';
     
-        if (gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective == true) {
-            gamePanelsArray[mapObject.playerPosition[0]][mapObject.playerPosition[1]].isObjective = false;
+        if (gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].isObjective == true) {
+            gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].isObjective = false;
             victoryCount--;
-            changeObjective(objectiveCount, victoryCount);
+            changeObjective(mapObjectiveCount, victoryCount);
 
             if (victoryCount == 0) {
                 let gameContainerWin = document.createElement('div');
@@ -225,8 +231,13 @@ let startGame = (mapObject) => {
                 let winMessage = document.createElement('p');
                 winMessage.classList.add('win-message');
                 winMessage.textContent = 'You win!';
+
+                let subWinMessage = document.createElement('p');
+                subWinMessage.classList.add('win-message', 'sub-win-message');
+                subWinMessage.textContent = 'press Esc';
     
                 gameContainerWin.appendChild(winMessage);
+                gameContainerWin.appendChild(subWinMessage);
                 gameContainer.appendChild(gameContainerWin);
     
                 // timeout powoduje że widoczna jest animacja - chodzi o coś z renderowaniem elementów html...?
@@ -236,9 +247,6 @@ let startGame = (mapObject) => {
             }
         }
     }
-    
-    
-    // EVENTS HANDLING
 }
 
 document.addEventListener('keydown', (e) => {
