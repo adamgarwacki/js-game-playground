@@ -13,6 +13,7 @@ body {
     margin: auto;
 }
 
+
 .game-side-panel {
     /* Tutaj border top-down ma 3px ponieważ tyle mają kafelki planszy */
     margin: 3px 10px;
@@ -31,6 +32,7 @@ body {
     font-size: 4em;
     text-align: center;
 }
+
 
 .sub-header {
     margin: 10px;
@@ -61,17 +63,48 @@ body {
 
 .game-menu-button {
     padding: 16px;
-    
+    margin: auto;
     font-size: 3em;
     text-align: center;
     font-weight: bold;
-
     background-color: transparent;
     border: none;
-
     cursor: pointer;
-}
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 
+}
+.game-menu-button:before {
+    content: "";
+    background-image: url('./img/title-arrow.png');
+    display: inline-block;
+    height: 1em;
+    background-repeat: no-repeat;
+    background-size: contain;
+    float: left ;
+    width: 1em;
+    animation-name: pointRight;
+    
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+
+}
+.game-menu-button:after {
+    content: "";
+    background-image: url('./img/title-arrow.png');
+  
+    display: inline-block;
+    height: 1em;
+    background-repeat: no-repeat;
+    background-size: contain;
+    float: right  ;
+    width: 1em;   
+  
+    animation-name: pointLeft;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite; 
+} 
 .game-menu-button:focus {
     outline: unset;
 }
@@ -214,6 +247,34 @@ body {
         opacity: 0.2;
     }
 }
+
+@keyframes pointLeft {
+    0% {
+        transform: translateX(0px) rotate(180deg);
+    }
+
+    50% {
+        transform: translateX(10px) rotate(180deg);
+    }
+    100% {
+        transform: translateX(20px) rotate(180deg);
+    }
+}    
+
+@keyframes pointRight {
+    0% {
+        transform: translateX(0px);
+        
+    }
+
+    50% {
+        transform: translateX(-10px);
+        
+    }
+    100% {
+        transform: translateX(-20px);
+         
+    }   
 
 /* RWD */
 
