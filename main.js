@@ -24,15 +24,13 @@ let map1 = {
 
 // START GRY, GENEROWANIE MAPY, PORUSZANIE SIĘ ETC:
 
-// playerMovement definiowane jest tutaj, żeby móc z niego korzystać w startMenu oraz w event listenerze w linii 248;
-let playerMovement = undefined;
-
 let startMenu = () => {
     gameContainer.innerHTML = '';
 
     let menuContainer = document.createElement('div');
     menuContainer.classList.add('menu-container');
 
+    // przycisk start:
     let startButton = document.createElement('button');
     startButton.classList.add('game-menu-button');
     startButton.textContent = 'START';
@@ -40,10 +38,82 @@ let startMenu = () => {
         // deep clone obiektu, żeby nie pisać po oryginale
         let mapObject = JSON.parse(JSON.stringify(map1));
         startGame(mapObject);
-    })
-
+    });
     menuContainer.appendChild(startButton);
+
+    // przycisk wybory poziomu:
+    let chooseLevelButton = document.createElement('button');
+    chooseLevelButton.classList.add('game-menu-button');
+    chooseLevelButton.textContent = 'CHOOSE LEVEL';
+    chooseLevelButton.addEventListener('click', () => {
+        startChooseLevel();
+    });
+    menuContainer.appendChild(chooseLevelButton);
+
+
+    // przycisk custom:
+    let customButton = document.createElement('custom');
+    customButton.classList.add('game-menu-button');
+    customButton.textContent = 'CUSTOM';
+    customButton.addEventListener('click', () => {
+        startCustom();
+    });
+    menuContainer.appendChild(customButton);
+
+
+    // przycisk opcje:
+    let optionButton = document.createElement('button');
+    optionButton.classList.add('game-menu-button');
+    optionButton.textContent = 'OPTIONS';
+    optionButton.addEventListener('click', () => {
+        startOptions();
+    });
+    menuContainer.appendChild(optionButton);
+
+
     gameContainer.appendChild(menuContainer);
+}
+
+
+let startChooseLevel = () => {
+    console.log('choose level!');
+}
+
+
+let startOptions = () => {
+    console.log('options!');
+}
+
+
+let startCustom = () => {
+    console.log('custom!');
+
+    let customMapObject = {
+        'size': 0, // input type number - suwak ???
+        'objectiveCount': 0, // input type number - suwaki???
+        'obstacleMap': [], // na podstawie size, wyświetlić pustą mapę, po kliknięciu togglować odpowiednie kafelki???
+        'playerPosition': [0, 0] // wpisać dwa parametry - współrzędne
+    };
+
+    // tworzenie menu
+    gameContainer.innerHTML = '';
+
+    let customMenuContainer = document.createElement('div');
+    customMenuContainer.classList.add('menu-container');
+
+    let uploadFileInput = document.createElement('input');
+    uploadFileInput.setAttribute('type', 'file');
+    uploadFileInput.setAttribute('accept', '.json');
+    uploadFileInput.addEventListener('change', handleFiles);
+    customMenuContainer.appendChild(uploadFileInput);
+
+    gameContainer.appendChild(customMenuContainer);
+
+    // obsługa ustawiania customowej mapy, zapisywanie etc.
+    let handleFiles = () => {
+        const fileList = this.files;
+        console.log(fileList);
+    }
 }
 
 
@@ -166,7 +236,7 @@ let startGame = (mapObject) => {
     // GAME ENGINE
     gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'gold';
 
-    playerMovement = (direction) => {
+    let playerMovement = (direction) => {
         switch (direction) {
             case 'ArrowLeft':
                 if (mapPlayerPosition[1] != 0 && !gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1] - 1].isObstacle) {
@@ -247,11 +317,12 @@ let startGame = (mapObject) => {
             }
         }
     }
+
+    document.addEventListener('keydown', (e) => {
+        playerMovement(e.code);
+    });
 }
 
-document.addEventListener('keydown', (e) => {
-    playerMovement(e.code);
-});
 
 // "INIT2:"
 startMenu();
