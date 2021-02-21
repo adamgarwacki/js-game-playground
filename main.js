@@ -101,19 +101,39 @@ let startCustom = () => {
     let customMenuContainer = document.createElement('div');
     customMenuContainer.classList.add('menu-container');
 
+    let sizeInput = document.createElement('input');
+    sizeInput.setAttribute('type', 'number');
+    sizeInput.addEventListener('change', () => {
+        console.log('dzyń');
+    });
+    customMenuContainer.appendChild(sizeInput);
+
+    let objectiveCountInput = document.createElement('input');
+    objectiveCountInput.setAttribute('type', 'number');
+    objectiveCountInput.addEventListener('change', () => {
+        console.log('dzyń');
+    });
+    customMenuContainer.appendChild(objectiveCountInput);
+
     let uploadFileInput = document.createElement('input');
     uploadFileInput.setAttribute('type', 'file');
     uploadFileInput.setAttribute('accept', '.json');
-    uploadFileInput.addEventListener('change', handleFiles);
+    uploadFileInput.addEventListener('change', (e) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            let data = reader.result;
+            customMapObject = JSON.parse(data);
+            console.log(customMapObject);
+        });
+        reader.readAsText(e.target.files[0]);
+    });
     customMenuContainer.appendChild(uploadFileInput);
+
+
 
     gameContainer.appendChild(customMenuContainer);
 
     // obsługa ustawiania customowej mapy, zapisywanie etc.
-    let handleFiles = () => {
-        const fileList = this.files;
-        console.log(fileList);
-    }
 }
 
 
