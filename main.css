@@ -111,6 +111,12 @@ body {
     outline: unset;
 }
 
+.start-custom-game {
+    width: 50%;
+    margin: 0px auto;
+    color: #000;
+}
+
 .game-container-win {
     position: absolute;
     top: 0px;

@@ -95,11 +95,13 @@ let startCustom = () => {
         'playerPosition': [0, 0] // wpisać dwa parametry - współrzędne
     };
 
-    // tworzenie menu
+    // tworzenie elementów układających się w menu customowej gry:
     gameContainer.innerHTML = '';
 
     let customMenuContainer = document.createElement('div');
     customMenuContainer.classList.add('menu-container');
+
+    // custom game to taki level creator, ozancza pola jako gracz/przeszkoda, po czym zapisuje
 
     let sizeInput = document.createElement('input');
     sizeInput.setAttribute('type', 'number');
@@ -118,8 +120,10 @@ let startCustom = () => {
     let uploadFileInput = document.createElement('input');
     uploadFileInput.setAttribute('type', 'file');
     uploadFileInput.setAttribute('accept', '.json');
+
     uploadFileInput.addEventListener('change', (e) => {
         const reader = new FileReader();
+        // najpierw odczytuje, potem dopiero może coś z tym zrobić
         reader.addEventListener('load', () => {
             let data = reader.result;
             customMapObject = JSON.parse(data);
@@ -129,11 +133,16 @@ let startCustom = () => {
     });
     customMenuContainer.appendChild(uploadFileInput);
 
+    let startGameButton = document.createElement('button');
+    startGameButton.textContent = 'start';
+    startGameButton.classList.add('start-custom-game', 'inactive');
+    customMenuContainer.appendChild(startGameButton);
+    startGameButton.onclick = () => {
+        startGame(customMapObject);
+    };
 
 
     gameContainer.appendChild(customMenuContainer);
-
-    // obsługa ustawiania customowej mapy, zapisywanie etc.
 }
 
 
@@ -239,7 +248,7 @@ let startGame = (mapObject) => {
         let posX = Math.floor(Math.random() * mapSize);
         let posY = Math.floor(Math.random() * mapSize);
     
-        if ((posX != 0 || posY != 0) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
+        if ((posX != mapObject.playerPosition[0] || posY != mapObject.playerPosition[1]) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
             gamePanelsArray[posY][posX].isObjective = true;
             gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
             ob--;
