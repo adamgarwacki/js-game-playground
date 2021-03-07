@@ -148,14 +148,27 @@ let startCustom = () => {
 
 let startGame = (mapObject) => {
 
+    // INIT
+
+
+    // czyszczenie ekranu gry:
     gameContainer.innerHTML = '';
 
-    // zmienne dla wygody
+    // mapSize jest potrzebny do określania rozmiarów kafelków:
     let mapSize = mapObject.size;
-    let mapObjectiveCount = mapObject.objectiveCount;
-    let mapObstacleMap = mapObject.obstacleMap;
-    let mapPlayerPosition = mapObject.playerPosition;
 
+    // obstacleMap ustala dokładnie które kafelki są przeszkodami:
+    let mapObstacleMap = mapObject.obstacleMap;
+    
+    // objectiveCount określa ilość celów do zebrania; na jego podstawie jest zrobiony licznik punktow:
+    let mapObjectiveCount = mapObject.objectiveCount;
+
+    // playerY/X służą do poruszania się oraz sprawdzania pozycji gracza zdefiniowanej w obiekcie mapy:
+    let playerY = mapObject.playerPosition[0];
+    let playerX = mapObject.playerPosition[1];
+
+
+    // ustawianie rozmiarów kafelka w zależności od rozmiaru planszy:
     let panelSizePreset = '';
     switch (mapSize) {
         case 2:
@@ -187,6 +200,8 @@ let startGame = (mapObject) => {
             break;
     }
 
+
+    // układanie przeszkód na mapie:
     let obstacleCount = 0;
     mapObstacleMap.forEach((arr) => {
         arr.forEach((el) => {
@@ -196,12 +211,7 @@ let startGame = (mapObject) => {
         });
     });
 
-    if (((mapSize * mapSize) - 1 - obstacleCount) < mapObjectiveCount) {
-        alert('Plansza ma za mało pól by wygenerować na niej podaną liczbę punktów do zebrania.');
-        mapObjectiveCount = 0;
-    }
-    
-    let indexIterator = 0;
+    // poniżej zostaje stworzony obiekt DOM będący planszą po której porusza się gracz;
     let gamePanelsArray = [];
     for (let i = 0; i < mapSize; i++) {
         let arrayRow = [];
@@ -209,10 +219,6 @@ let startGame = (mapObject) => {
             let singlePanelObject = {}
             let singleGamePanel = document.createElement('div');
             singleGamePanel.classList.add('single-panel', panelSizePreset);
-    
-            // Nadawanie id poszczególnym polom - może się przydać kiedyś!!!
-            // singleGamePanel.id = `element-index-${indexIterator}`;
-    
     
             singlePanelObject.panelId = singleGamePanel;
             singlePanelObject.isObjective = false;
@@ -222,13 +228,22 @@ let startGame = (mapObject) => {
             gameContainer.appendChild(singleGamePanel);
     
             arrayRow.push(singlePanelObject);
-            indexIterator += 1;
         }
         gamePanelsArray.push(arrayRow);
     }
     console.log(gamePanelsArray);
 
-    // USTAWIANIE MAPY
+
+
+    // USTAWIANIE MAPY - układanie przeszkód oraz celów na wcześniej stworzonej mapie:
+
+    // poniższy if ma zapobiegać wchodzeniu w nieskończoną pętlę, kiedy nie da rady wygenerować wskazanej w obiekcie mapy liczby celów do zebrania:
+    if (((mapSize * mapSize) - 1 - obstacleCount) < mapObjectiveCount) {
+        alert('Plansza ma za mało pól by wygenerować na niej podaną liczbę punktów do zebrania.');
+        mapObjectiveCount = 0;
+    }
+
+    // układanie przeszkód na planszy:
     mapObstacleMap.forEach(row => {
         for (let i = 0; i < row.length; i++) {
             if (row[i] == 1) {
@@ -238,70 +253,80 @@ let startGame = (mapObject) => {
         }
     });
 
-    
-    // USTAWIANIE OBJECTIVE
-    // let objectiveCount = mapObjectiveCount;
+    // pętla while losująca miejsca na planszy na których ma być umieszczony cel do zebrania:
     let victoryCount = mapObjectiveCount;
-
     let ob = mapObjectiveCount;
+
     while (ob > 0) {
         let posX = Math.floor(Math.random() * mapSize);
         let posY = Math.floor(Math.random() * mapSize);
+
+        let randomPos = gamePanelsArray[posY][posX];
     
-        if ((posX != mapObject.playerPosition[0] || posY != mapObject.playerPosition[1]) && !gamePanelsArray[posY][posX].isObjective && !gamePanelsArray[posY][posX].isObstacle) {
-            gamePanelsArray[posY][posX].isObjective = true;
-            gamePanelsArray[posY][posX].panelId.style.backgroundColor = 'red';
+        if ((posX != playerX || posY != playerY) && !randomPos.isObjective && !randomPos.isObstacle) {
+            randomPos.isObjective = true;
+            randomPos.panelId.style.backgroundColor = 'red';
             ob--;
         }
     }
 
+    // changeObjective zmienia wartość wpisaną w wyświetlany obok planszy licznik:
     let changeObjective = (maxScore, victoryCount) => {
         document.getElementById('score').innerText = `${maxScore - victoryCount} / ${maxScore}`;
     }
     
+    // pierwszy changeObjective aby zainicjować licznik:
     changeObjective(mapObjectiveCount, victoryCount);
     
 
-    // GAME ENGINE
-    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'gold';
 
+    // -----------------------------------------------------------------------
+
+    // GAME ENGINE - 
+
+
+    // poniżej inicjowana jest pozycja gracza:
+    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'gold';
     let playerMovement = (direction) => {
+        playerY = mapObject.playerPosition[0];
+        playerX = mapObject.playerPosition[1];
+
         switch (direction) {
             case 'ArrowLeft':
-                if (mapPlayerPosition[1] != 0 && !gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1] - 1].isObstacle) {
-                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (playerX != 0 && !gamePanelsArray[playerY][playerX - 1].isObstacle) {
+                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
     
-                    mapPlayerPosition[1]--;
+                    playerX--;
                     break;
                 } else {
                     break;
                 }
     
             case 'ArrowUp':
-                if (mapPlayerPosition[0] != 0 && !gamePanelsArray[mapPlayerPosition[0] - 1][mapPlayerPosition[1]].isObstacle) {
-                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (playerY != 0 && !gamePanelsArray[playerY - 1][playerX].isObstacle) {
+                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
     
-                    mapPlayerPosition[0]--;
+                    playerY--;
                     break;
                 } else {
                     break;
                 }
     
             case 'ArrowRight':
-                if (mapPlayerPosition[1] != mapSize - 1 && !gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1] + 1].isObstacle) {
-                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (playerX != mapSize - 1 && !gamePanelsArray[playerY][playerX + 1].isObstacle) {
+                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
     
-                    mapPlayerPosition[1]++;
+                    playerX++;
                     break;
                 } else {
                     break;
                 }
     
             case 'ArrowDown':
-                if (mapPlayerPosition[0] != mapSize - 1 && !gamePanelsArray[mapPlayerPosition[0] + 1][mapPlayerPosition[1]].isObstacle) {
-                    gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'green';
+                if (playerY != mapSize - 1 && !gamePanelsArray[playerY + 1][playerX].isObstacle) {
+                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
     
-                    mapPlayerPosition[0]++;
+                    playerY++;
                     break;
                 } else {
                     break;
@@ -315,10 +340,15 @@ let startGame = (mapObject) => {
             default:
                 break;
         }
-        gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].panelId.style.backgroundColor = 'gold';
+
+        // "pomalowanie" nowego kafelka i zapisanie nowej pozycji gracza:
+        gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'gold';
+        mapObject.playerPosition[0] = playerY;
+        mapObject.playerPosition[1] = playerX;
+
     
-        if (gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].isObjective == true) {
-            gamePanelsArray[mapPlayerPosition[0]][mapPlayerPosition[1]].isObjective = false;
+        if (gamePanelsArray[playerY][playerX].isObjective == true) {
+            gamePanelsArray[playerY][playerX].isObjective = false;
             victoryCount--;
             changeObjective(mapObjectiveCount, victoryCount);
 
