@@ -1,11 +1,18 @@
 'use strict';
 
+
 // TODO:
 // - lepsza funkcja-bezpiecznik (line 66)
 // - dodać licznik ruchów 
 
 
 // "INIT":
+
+// sprawdzanie czy urządzenie ma ekran dotykowy:
+if (!('ontouchstart' in window)) {
+    document.getElementById('button-space').style.display = 'none';
+}
+
 let gameContainer = document.getElementById('game-container');
 
 // PRESETY MAP:
