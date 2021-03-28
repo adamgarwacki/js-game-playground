@@ -29,6 +29,46 @@ let map1 = {
     'playerPosition': [0, 0]
 }
 
+// ODŚWIEŻANIE MAPY:
+
+let setMapObject = (size) => {
+    let pArr = [];
+    for (let i = 0; i < size; i++) {
+        let arrayRow = [];
+        for (let j = 0; j < size; j++) {
+            let singlePanelObject = {};
+            singlePanelObject.panelId = undefined;
+            singlePanelObject.isObstacle = false;
+            singlePanelObject.isObjective = false;
+            arrayRow.push(singlePanelObject);
+        }
+        pArr.push(arrayRow);
+    }
+    return pArr;
+}
+
+let refreshGameDOM = (dObj, target, preset) => {
+    target.innerHTML = '';
+    dObj.forEach(row => {
+        row.forEach(el => {
+            let singleGamePanel = document.createElement('div');
+            singleGamePanel.classList.add('single-panel', preset);
+
+            el.panelId = singleGamePanel;
+
+            target.appendChild(singleGamePanel);
+        });
+    });
+}
+
+let setChangeState = () => {
+    for (let i = 0; i < gamePanelsArray.length; i++) {
+        for (let j = 0; j < gamePanelsArray[i].length; j++) {
+            gamePanelsArray[i][j].panelId.addEventListener('click', () => changeState(i, j));
+        } 
+    }
+}
+
 // START GRY, GENEROWANIE MAPY, PORUSZANIE SIĘ ETC:
 
 let startMenu = () => {
@@ -117,12 +157,15 @@ let startCustom = () => {
     });
     customMenuContainer.appendChild(sizeInput);
 
-    let objectiveCountInput = document.createElement('input');
-    objectiveCountInput.setAttribute('type', 'number');
-    objectiveCountInput.addEventListener('change', () => {
-        console.log('dzyń');
-    });
-    customMenuContainer.appendChild(objectiveCountInput);
+
+    // OBJECTIVE COUNT
+    
+    // let objectiveCountInput = document.createElement('input');
+    // objectiveCountInput.setAttribute('type', 'number');
+    // objectiveCountInput.addEventListener('change', () => {
+    //     console.log('dzyń');
+    // });
+    // customMenuContainer.appendChild(objectiveCountInput);
 
     let uploadFileInput = document.createElement('input');
     uploadFileInput.setAttribute('type', 'file');
@@ -218,29 +261,11 @@ let startGame = (mapObject) => {
         });
     });
 
-    // poniżej zostaje stworzony obiekt DOM będący planszą po której porusza się gracz;
-    let gamePanelsArray = [];
-    for (let i = 0; i < mapSize; i++) {
-        let arrayRow = [];
-        for (let j = 0; j < mapSize; j++) {
-            let singlePanelObject = {}
-            let singleGamePanel = document.createElement('div');
-            singleGamePanel.classList.add('single-panel', panelSizePreset);
-    
-            singlePanelObject.panelId = singleGamePanel;
-            singlePanelObject.isObjective = false;
-            singlePanelObject.isObstacle = false;
-    
-    
-            gameContainer.appendChild(singleGamePanel);
-    
-            arrayRow.push(singlePanelObject);
-        }
-        gamePanelsArray.push(arrayRow);
-    }
-    console.log(gamePanelsArray);
+    // tworzenie obiektu plansz:
+    let gamePanelsArray = setMapObject(mapSize);
 
-
+    // dodawanie mapy do DOMu:
+    refreshGameDOM(gamePanelsArray, gameContainer, panelSizePreset);
 
     // USTAWIANIE MAPY - układanie przeszkód oraz celów na wcześniej stworzonej mapie:
 
