@@ -13,6 +13,8 @@ if (!('ontouchstart' in window)) {
     document.getElementById('button-space').style.display = 'none';
 }
 
+// gameContainer jest divem, w którym będą pojawiały się mapy, ekrany opcji i inne takie
+// to jest coś w stylu "ekranu gry"
 let gameContainer = document.getElementById('game-container');
 
 // PRESETY MAP:
@@ -61,12 +63,61 @@ let refreshGameDOM = (dObj, target, preset) => {
     });
 }
 
-let setChangeState = () => {
-    for (let i = 0; i < gamePanelsArray.length; i++) {
-        for (let j = 0; j < gamePanelsArray[i].length; j++) {
-            gamePanelsArray[i][j].panelId.addEventListener('click', () => changeState(i, j));
+// changeState toggluje między przeszkodą a polem do chodzenia po naciśnięciu na element
+let changeState = (y, x, gpa) => {
+    let isObstacle = gpa[y][x].isObstacle;
+    let targetPanel = gpa[y][x].panelId;
+
+    if (isObstacle) {
+        gpa[y][x].isObstacle = false;
+        targetPanel.style.backgroundColor = 'green';
+    } else {
+        gpa[y][x].isObstacle = true;
+        targetPanel.style.backgroundColor = 'grey';
+    }
+}
+
+// setChangeState jedynie dodaje funkcję do elementów
+let setChangeState = (gpa) => {
+    for (let i = 0; i < gpa.length; i++) {
+        for (let j = 0; j < gpa[i].length; j++) {
+            gpa[i][j].panelId.addEventListener('click', () => changeState(i, j, gpa));
         } 
     }
+}
+
+let changePanelPreset = (s) => {
+    let p = '';
+    switch (s) {
+        case 2:
+            p = 'single-panel-2';
+            break;
+
+        case 3:
+            p = 'single-panel-3';
+            break;
+
+        case 4:
+            p = 'single-panel-4';
+            break;
+
+        case 5:
+            p = 'single-panel-5';
+            break;
+
+        case 6:
+            p = 'single-panel-6';
+            break;
+
+        case 8:
+            p = 'single-panel-8';
+            break;
+
+        default:
+            console.log('Nie istnieje preset kafelka dla podanego rozmiaru planszy!');
+            break;
+    }
+    return p;
 }
 
 // START GRY, GENEROWANIE MAPY, PORUSZANIE SIĘ ETC:
@@ -142,20 +193,53 @@ let startCustom = () => {
         'playerPosition': [0, 0] // wpisać dwa parametry - współrzędne
     };
 
+    let mapSize = 0;
+
     // tworzenie elementów układających się w menu customowej gry:
     gameContainer.innerHTML = '';
 
     let customMenuContainer = document.createElement('div');
     customMenuContainer.classList.add('menu-container');
 
+    let customOptionsContainer = document.createElement('div');
+    customOptionsContainer.classList.add('custom-options-container');
+
     // custom game to taki level creator, ozancza pola jako gracz/przeszkoda, po czym zapisuje
 
-    let sizeInput = document.createElement('input');
-    sizeInput.setAttribute('type', 'number');
-    sizeInput.addEventListener('change', () => {
-        console.log('dzyń');
+    // mapPreview pokazuje jak będzie wyglądała mapa, plus pozwala na zaznaczanie który kafelek będzie przeszkodą;
+    let mapPreview = document.createElement('div');
+    mapPreview.classList.add('map-preview');
+    mapPreview.id = 'map-preview';
+    customMenuContainer.appendChild(mapPreview);
+
+
+
+
+    let sizeInput = document.createElement('select');
+    sizeInput.setAttribute('name', 'map-size-input');
+    sizeInput.id = 'map-size-input';
+    
+    let sizesTable = [2, 3, 4, 5, 6, 8];
+    sizesTable.forEach(e => {
+        let opt = document.createElement('option');
+        opt.value = `${e}`;
+        opt.innerText = e;
+        sizeInput.appendChild(opt);
     });
-    customMenuContainer.appendChild(sizeInput);
+
+    // to zmienia preset kafelków, odświeża mapę i dodaje każdemu elementowi changeState
+    sizeInput.addEventListener('change', () => {
+        mapSize = parseInt(sizeInput.value);
+        let s = changePanelPreset(mapSize);
+
+        customMapObject.obstacleMap = setMapObject(mapSize);
+        refreshGameDOM(customMapObject.obstacleMap, mapPreview, s);
+
+        setChangeState(customMapObject.obstacleMap);
+    });
+    customOptionsContainer.appendChild(sizeInput);
+
+
 
 
     // OBJECTIVE COUNT
@@ -181,17 +265,36 @@ let startCustom = () => {
         });
         reader.readAsText(e.target.files[0]);
     });
-    customMenuContainer.appendChild(uploadFileInput);
+    customOptionsContainer.appendChild(uploadFileInput);
 
     let startGameButton = document.createElement('button');
     startGameButton.textContent = 'start';
     startGameButton.classList.add('start-custom-game', 'inactive');
-    customMenuContainer.appendChild(startGameButton);
+    customOptionsContainer.appendChild(startGameButton);
     startGameButton.onclick = () => {
         startGame(customMapObject);
     };
 
 
+    let saveButton = document.createElement('button');
+    saveButton.classList.add('save-map');
+    saveButton.id = 'save-map';
+    saveButton.innerText = 'Zapisz mapę';
+    customOptionsContainer.appendChild(saveButton);
+
+    let saveMap = () => {
+        let mapName = window.prompt('Nazwa mapy:');
+        if (mapName != undefined) {
+            localStorage.setItem(mapName, JSON.stringify(customMapObject));
+        }
+    }
+
+    saveButton.addEventListener('click', () => {
+        saveMap();
+    });
+
+
+    customMenuContainer.appendChild(customOptionsContainer);
     gameContainer.appendChild(customMenuContainer);
 }
 
@@ -219,36 +322,7 @@ let startGame = (mapObject) => {
 
 
     // ustawianie rozmiarów kafelka w zależności od rozmiaru planszy:
-    let panelSizePreset = '';
-    switch (mapSize) {
-        case 2:
-            panelSizePreset = 'single-panel-2';
-            break;
-
-        case 3:
-            panelSizePreset = 'single-panel-3';
-            break;
-
-        case 4:
-            panelSizePreset = 'single-panel-4';
-            break;
-
-        case 5:
-            panelSizePreset = 'single-panel-5';
-            break;
-
-        case 6:
-            panelSizePreset = 'single-panel-6';
-            break;
-
-        case 8:
-            panelSizePreset = 'single-panel-8';
-            break;
-
-        default:
-            console.log('Nie istnieje preset kafelka dla podanego rozmiaru planszy!');
-            break;
-    }
+    let panelSizePreset = changePanelPreset(mapSize);
 
 
     // układanie przeszkód na mapie:
