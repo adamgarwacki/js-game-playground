@@ -393,7 +393,6 @@ let startGame = (mapObject) => {
     // poniżej inicjowana jest pozycja gracza:
     gamePanelsArray[playerY][playerX].panelId.classList.add('player-panel');
 
-
     let playerMovement = (direction) => {
         playerY = mapObject.playerPosition[0];
         playerX = mapObject.playerPosition[1];
