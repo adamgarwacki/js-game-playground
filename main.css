@@ -148,6 +148,8 @@ body {
     margin: 5px auto;
 }
 
+/* GAME-RELATED RULESETS */
+
 .game-container-win {
     position: absolute;
     top: 0px;
@@ -190,6 +192,28 @@ body {
     box-sizing: border-box;
     background-color: green;
     border: 3px solid #121c54;
+}
+
+/* Klasy dla paneli */
+
+/* każdy kafelek ma domyślnie background-color: green;
+   kiedy jest potrzeba dodajemy jedną z poniższych klas,
+   która dzięki kaskadowości nadpisze zielony kolor i zastąpi
+   go odpowiednim */
+
+   .mark-panel {
+    background-color: red;
+}
+
+.player-panel {
+    /* background-image: url('./img/dogecoin.jpg'); <-- test dla obrazków */
+    /* background-size:contain; */
+
+    background-color: gold;
+}
+
+.obstacle-panel {
+    background-color: gray;
 }
 
 /*CONTROL BUTTONS*/
@@ -237,25 +261,6 @@ body {
     fill: gold;
     stroke: gold;
     stroke-width: 1;
-}
-
-.mark-panel {
-    background-color: red;
-}
-
-.empty-panel {
-    background-color: green;
-}
-
-
-
-.player-panel {
-    background-image: url('./img/dogecoin.jpg');
-    background-size:contain;
-}
-
-.obstacle-panel {
-    background-color: gray;
 }
 
 /* PANEL SIZE PRESETS */
