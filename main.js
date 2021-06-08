@@ -70,10 +70,9 @@ let changeState = (y, x, gpa) => {
 
     if (isObstacle) {
         gpa[y][x].isObstacle = false;
-        targetPanel.style.backgroundColor = 'green';
     } else {
         gpa[y][x].isObstacle = true;
-        targetPanel.style.backgroundColor = 'grey';
+        targetPanel.classList.add('obstacle-panel');
     }
 }
 
@@ -371,7 +370,7 @@ let startGame = (mapObject) => {
     
         if ((posX != playerX || posY != playerY) && !randomPos.isObjective && !randomPos.isObstacle) {
             randomPos.isObjective = true;
-            randomPos.panelId.classList.add ('mark-panel');
+            randomPos.panelId.classList.add('mark-panel');
             ob--;
         }
     }
@@ -392,7 +391,9 @@ let startGame = (mapObject) => {
 
 
     // poniżej inicjowana jest pozycja gracza:
-    gamePanelsArray[playerY][playerX].panelId.classList.add('player-panel');
+    gamePanelsArray[playerY][playerX].panelId.classList.add('player-panel'); // todo: można by to zmienić???
+
+
     let playerMovement = (direction) => {
         playerY = mapObject.playerPosition[0];
         playerX = mapObject.playerPosition[1];
@@ -400,7 +401,7 @@ let startGame = (mapObject) => {
         switch (direction) {
             case 'ArrowLeft':
                 if (playerX != 0 && !gamePanelsArray[playerY][playerX - 1].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    // gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
                     gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
                     
                     playerX--;
@@ -411,7 +412,7 @@ let startGame = (mapObject) => {
     
             case 'ArrowUp':
                 if (playerY != 0 && !gamePanelsArray[playerY - 1][playerX].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    // gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
                     gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
 
                     playerY--;
@@ -422,7 +423,7 @@ let startGame = (mapObject) => {
     
             case 'ArrowRight':
                 if (playerX != mapSize - 1 && !gamePanelsArray[playerY][playerX + 1].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    // gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
                     gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
 
                     playerX++;
@@ -433,7 +434,7 @@ let startGame = (mapObject) => {
     
             case 'ArrowDown':
                 if (playerY != mapSize - 1 && !gamePanelsArray[playerY + 1][playerX].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    // gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
                     gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
 
                     playerY++;
@@ -455,10 +456,10 @@ let startGame = (mapObject) => {
         gamePanelsArray[playerY][playerX].panelId.classList.add('player-panel');
         mapObject.playerPosition[0] = playerY;
         mapObject.playerPosition[1] = playerX;
-
     
         if (gamePanelsArray[playerY][playerX].isObjective == true) {
             gamePanelsArray[playerY][playerX].isObjective = false;
+            gamePanelsArray[playerY][playerX].panelId.classList.remove('mark-panel');
             victoryCount--;
             changeObjective(mapObjectiveCount, victoryCount);
 
