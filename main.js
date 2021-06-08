@@ -354,7 +354,7 @@ let startGame = (mapObject) => {
         for (let i = 0; i < row.length; i++) {
             if (row[i] == 1) {
                 gamePanelsArray[mapObstacleMap.indexOf(row)][i].isObstacle = true;
-                gamePanelsArray[mapObstacleMap.indexOf(row)][i].panelId.style.backgroundColor = 'gray';
+                gamePanelsArray[mapObstacleMap.indexOf(row)][i].panelId.classList.add ('obstacle-panel');
             }
         }
     });
@@ -371,7 +371,7 @@ let startGame = (mapObject) => {
     
         if ((posX != playerX || posY != playerY) && !randomPos.isObjective && !randomPos.isObstacle) {
             randomPos.isObjective = true;
-            randomPos.panelId.style.backgroundColor = 'red';
+            randomPos.panelId.classList.add ('mark-panel');
             ob--;
         }
     }
@@ -392,7 +392,7 @@ let startGame = (mapObject) => {
 
 
     // poniżej inicjowana jest pozycja gracza:
-    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'gold';
+    gamePanelsArray[playerY][playerX].panelId.classList.add('player-panel');
     let playerMovement = (direction) => {
         playerY = mapObject.playerPosition[0];
         playerX = mapObject.playerPosition[1];
@@ -400,8 +400,9 @@ let startGame = (mapObject) => {
         switch (direction) {
             case 'ArrowLeft':
                 if (playerX != 0 && !gamePanelsArray[playerY][playerX - 1].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
-    
+                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
+                    
                     playerX--;
                     break;
                 } else {
@@ -410,8 +411,9 @@ let startGame = (mapObject) => {
     
             case 'ArrowUp':
                 if (playerY != 0 && !gamePanelsArray[playerY - 1][playerX].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
-    
+                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
+
                     playerY--;
                     break;
                 } else {
@@ -420,8 +422,9 @@ let startGame = (mapObject) => {
     
             case 'ArrowRight':
                 if (playerX != mapSize - 1 && !gamePanelsArray[playerY][playerX + 1].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
-    
+                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
+
                     playerX++;
                     break;
                 } else {
@@ -430,8 +433,9 @@ let startGame = (mapObject) => {
     
             case 'ArrowDown':
                 if (playerY != mapSize - 1 && !gamePanelsArray[playerY + 1][playerX].isObstacle) {
-                    gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'green';
-    
+                    gamePanelsArray[playerY][playerX].panelId.classList.add ('empty-panel');
+                    gamePanelsArray[playerY][playerX].panelId.classList.remove('player-panel');
+
                     playerY++;
                     break;
                 } else {
@@ -448,7 +452,7 @@ let startGame = (mapObject) => {
         }
 
         // "pomalowanie" nowego kafelka i zapisanie nowej pozycji gracza:
-        gamePanelsArray[playerY][playerX].panelId.style.backgroundColor = 'gold';
+        gamePanelsArray[playerY][playerX].panelId.classList.add('player-panel');
         mapObject.playerPosition[0] = playerY;
         mapObject.playerPosition[1] = playerX;
 

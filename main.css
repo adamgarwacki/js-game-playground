@@ -8,6 +8,8 @@ body {
     background-color: #121c54;
 }
 
+
+
 .main-container {
     width: 100%;
     margin: auto;
@@ -237,6 +239,24 @@ body {
     stroke-width: 1;
 }
 
+.mark-panel {
+    background-color: red;
+}
+
+.empty-panel {
+    background-color: green;
+}
+
+
+
+.player-panel {
+    background-image: url('./img/dogecoin.jpg');
+    background-size:contain;
+}
+
+.obstacle-panel {
+    background-color: gray;
+}
 
 /* PANEL SIZE PRESETS */
 
