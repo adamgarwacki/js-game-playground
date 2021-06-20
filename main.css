@@ -205,11 +205,35 @@ body {
     background-color: red;
 }
 
+
+
 .player-panel {
     /* background-image: url('./img/dogecoin.jpg'); <-- test dla obrazków */
     /* background-size:contain; */
+    position: relative;
+
 
     background-color: gold;
+}
+
+.player-panel::after {
+    content: '';
+    box-sizing: border-box;
+
+    /* poniższe ustawia after w centrum kafelka,
+    po czym offsetuje istnienie box-sizing i bordera na rodzicu */
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: inherit;
+    height: inherit;
+    border: 3px solid #121c54;
+
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+
+    background-color: green;
 }
 
 .obstacle-panel {
