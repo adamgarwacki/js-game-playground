@@ -298,6 +298,81 @@ let startCustom = () => {
 }
 
 
+
+
+
+// "INIT2:"
+startMenu();
+
+
+
+
+
+
+
+
+
+// GENEROWANIE LABIRYNTU: (NIE DZIAŁA - ZOSTAWIAM JAKO "PAMIĄTKA")
+
+/* gamePanelsArray.forEach((row) => {
+    row.forEach((panel) => {
+        let xPos = row.indexOf(panel);
+        let yPos = gamePanelsArray.indexOf(row);
+        
+        let walkWayCount = 0;
+        let nearbyObstacles = [];
+
+        if (yPos > 0) {
+            if (gamePanelsArray[yPos-1][xPos].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos-1][xPos]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        if (xPos > 0) {
+            if (gamePanelsArray[yPos][xPos-1].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos][xPos-1]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        if (xPos < cols-1) {
+            if (gamePanelsArray[yPos][xPos+1].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos][xPos+1]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        if (yPos < rows-1) {
+            if (gamePanelsArray[yPos+1][xPos].isObstacle) {
+                nearbyObstacles.push(gamePanelsArray[yPos+1][xPos]);
+            } else {
+                walkWayCount++;
+            }
+        }
+
+        // let nearbyObstaclesCount = nearbyObstacles.length;
+
+
+        // TUTAJ NIE DZIAŁA!!!!!!!!!!!
+        console.log(walkWayCount);
+        while (walkWayCount < 2) {
+            let randNum = Math.floor(Math.random()*nearbyObstacles.length)
+            nearbyObstacles[randNum].isObstacle = false;
+            nearbyObstacles[randNum].panelId.style.backgroundColor = 'green';
+            let tempArr = nearbyObstacles.splice(randNum, 1);
+            nearbyObstacles = [];
+            nearbyObstacles = tempArr;
+            // console.log(nearbyObstacles);
+            walkWayCount++;
+        }
+    })
+}) */
+
+
 let startGame = (mapObject) => {
 
     // INIT
@@ -487,76 +562,3 @@ let startGame = (mapObject) => {
         playerMovement(e.code);
     });
 }
-
-
-// "INIT2:"
-startMenu();
-
-
-
-
-
-
-
-
-
-// GENEROWANIE LABIRYNTU: (NIE DZIAŁA - ZOSTAWIAM JAKO "PAMIĄTKA")
-
-/* gamePanelsArray.forEach((row) => {
-    row.forEach((panel) => {
-        let xPos = row.indexOf(panel);
-        let yPos = gamePanelsArray.indexOf(row);
-        
-        let walkWayCount = 0;
-        let nearbyObstacles = [];
-
-        if (yPos > 0) {
-            if (gamePanelsArray[yPos-1][xPos].isObstacle) {
-                nearbyObstacles.push(gamePanelsArray[yPos-1][xPos]);
-            } else {
-                walkWayCount++;
-            }
-        }
-
-        if (xPos > 0) {
-            if (gamePanelsArray[yPos][xPos-1].isObstacle) {
-                nearbyObstacles.push(gamePanelsArray[yPos][xPos-1]);
-            } else {
-                walkWayCount++;
-            }
-        }
-
-        if (xPos < cols-1) {
-            if (gamePanelsArray[yPos][xPos+1].isObstacle) {
-                nearbyObstacles.push(gamePanelsArray[yPos][xPos+1]);
-            } else {
-                walkWayCount++;
-            }
-        }
-
-        if (yPos < rows-1) {
-            if (gamePanelsArray[yPos+1][xPos].isObstacle) {
-                nearbyObstacles.push(gamePanelsArray[yPos+1][xPos]);
-            } else {
-                walkWayCount++;
-            }
-        }
-
-        // let nearbyObstaclesCount = nearbyObstacles.length;
-
-
-        // TUTAJ NIE DZIAŁA!!!!!!!!!!!
-        console.log(walkWayCount);
-        while (walkWayCount < 2) {
-            let randNum = Math.floor(Math.random()*nearbyObstacles.length)
-            nearbyObstacles[randNum].isObstacle = false;
-            nearbyObstacles[randNum].panelId.style.backgroundColor = 'green';
-            let tempArr = nearbyObstacles.splice(randNum, 1);
-            nearbyObstacles = [];
-            nearbyObstacles = tempArr;
-            // console.log(nearbyObstacles);
-            walkWayCount++;
-        }
-    })
-}) */
-
