@@ -70,6 +70,7 @@ let changeState = (y, x, gpa) => {
 
     if (isObstacle) {
         gpa[y][x].isObstacle = false;
+        targetPanel.classList.remove('obstacle-panel');
     } else {
         gpa[y][x].isObstacle = true;
         targetPanel.classList.add('obstacle-panel');
@@ -184,6 +185,9 @@ let startOptions = () => {
 
 let startCustom = () => {
     console.log('custom!');
+
+    // todo: nie zapisujemy planszy w postaci 0/1, to powoduje problemy z liczeniem obstacles i tak dalej
+    // coś jest nie tak ze spójnością: dwa różne rodzaje zapisu???
 
     let customMapObject = {
         'size': 0, // input type number - suwak ???

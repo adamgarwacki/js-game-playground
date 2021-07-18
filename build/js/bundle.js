@@ -70,6 +70,7 @@ let changeState = (y, x, gpa) => {
 
     if (isObstacle) {
         gpa[y][x].isObstacle = false;
+        targetPanel.classList.remove('obstacle-panel');
     } else {
         gpa[y][x].isObstacle = true;
         targetPanel.classList.add('obstacle-panel');
@@ -184,6 +185,9 @@ let startOptions = () => {
 
 let startCustom = () => {
     console.log('custom!');
+
+    // todo: nie zapisujemy planszy w postaci 0/1, to powoduje problemy z liczeniem obstacles i tak dalej
+    // coś jest nie tak ze spójnością: dwa różne rodzaje zapisu???
 
     let customMapObject = {
         'size': 0, // input type number - suwak ???
@@ -398,8 +402,17 @@ let startGame = (mapObject) => {
     // ustawianie rozmiarów kafelka w zależności od rozmiaru planszy:
     let panelSizePreset = changePanelPreset(mapSize);
 
+    // tworzenie obiektu plansz:
+    let gamePanelsArray = setMapObject(mapSize);
 
-    // układanie przeszkód na mapie:
+    // dodawanie mapy do DOMu:
+    refreshGameDOM(gamePanelsArray, gameContainer, panelSizePreset);
+
+    // USTAWIANIE MAPY - układanie przeszkód oraz celów na wcześniej stworzonej mapie:
+    
+    console.log(mapObstacleMap);
+
+    // liczenie przeszkód na mapie:
     let obstacleCount = 0;
     mapObstacleMap.forEach((arr) => {
         arr.forEach((el) => {
@@ -409,16 +422,11 @@ let startGame = (mapObject) => {
         });
     });
 
-    // tworzenie obiektu plansz:
-    let gamePanelsArray = setMapObject(mapSize);
-
-    // dodawanie mapy do DOMu:
-    refreshGameDOM(gamePanelsArray, gameContainer, panelSizePreset);
-
-    // USTAWIANIE MAPY - układanie przeszkód oraz celów na wcześniej stworzonej mapie:
-
     // poniższy if ma zapobiegać wchodzeniu w nieskończoną pętlę, kiedy nie da rady wygenerować wskazanej w obiekcie mapy liczby celów do zebrania:
-    if (((mapSize * mapSize) - 1 - obstacleCount) < mapObjectiveCount) {
+    let freeSpaces = (mapSize * mapSize) - 1 - obstacleCount;
+    if (freeSpaces < mapObjectiveCount) {
+        console.log(freeSpaces);
+        console.log(mapObjectiveCount);
         alert('Plansza ma za mało pól by wygenerować na niej podaną liczbę punktów do zebrania.');
         mapObjectiveCount = 0;
     }
