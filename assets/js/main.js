@@ -17,6 +17,20 @@ if (!('ontouchstart' in window)) {
 // to jest coś w stylu "ekranu gry"
 let gameContainer = document.getElementById('game-container');
 
+//MUZYKA
+
+let on_off = document.querySelector('.container .musicButton');
+
+
+let audio = document.getElementById('audio');
+on_off.onclick = () => {
+  if (audio.paused) { audio.play(); }
+  else { audio.pause(); }
+}
+on_off.addEventListener('click', () => {
+    console.log('dzyń');
+    }
+  );
 // PRESETY MAP:
 
 let map1 = {

@@ -7,13 +7,24 @@
     <title>Playground</title>
 
     <link rel="stylesheet" href="./main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tourney:wght@300&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
     <div class="main-container">
-        <h1 class="header-one">Playground v 1.0</h1>
-       
+        <h1 class="header-one">Cyberbug 2077</h1>
+         
+        <div class="musicOn">
+            <audio id="audio" style="display:none;" src="/assets/media/audio/8-bit-Music.mp3" type="audio/mpeg" controls loop onloadeddata="setHalfVolume()"></audio>
+          </div>
+        <div class="container">
+            <h1 class="musicButton">Play 8-bit Music</h1>
+        </div>
+
         <div class="main-game-area">
             <div class="game-side-panel">
                 <h2 class="sub-header">LEVEL</h2>

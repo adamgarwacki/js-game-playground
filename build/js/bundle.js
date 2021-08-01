@@ -17,6 +17,20 @@ if (!('ontouchstart' in window)) {
 // to jest coś w stylu "ekranu gry"
 let gameContainer = document.getElementById('game-container');
 
+//MUZYKA
+
+let on_off = document.querySelector('.container .musicButton');
+
+
+let audio = document.getElementById('audio');
+on_off.onclick = () => {
+  if (audio.paused) { audio.play(); }
+  else { audio.pause(); }
+}
+on_off.addEventListener('click', () => {
+    console.log('dzyń');
+    }
+  );
 // PRESETY MAP:
 
 let map1 = {
@@ -198,9 +212,6 @@ let startChooseLevel = () => {
 }
 let startCustom = () => {
     console.log('custom!');
-
-    // todo: nie zapisujemy planszy w postaci 0/1, to powoduje problemy z liczeniem obstacles i tak dalej
-    // coś jest nie tak ze spójnością: dwa różne rodzaje zapisu???
 
     let customMapObject = {
         'size': 0, // input type number - suwak ???
